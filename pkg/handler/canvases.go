@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+	"slices"
 	"strings"
 
 	"github.com/korotovsky/slack-mcp-server/pkg/provider"
@@ -197,7 +198,7 @@ func (h *CanvasesHandler) CanvasesEditHandler(ctx context.Context, request mcp.C
 	if operation == "" {
 		return nil, errors.New("operation must be provided")
 	}
-	if !contains(canvasEditOperations, operation) {
+	if !slices.Contains(canvasEditOperations, operation) {
 		return nil, fmt.Errorf("operation must be one of %s, got %q",
 			strings.Join(canvasEditOperations, ", "), operation)
 	}
@@ -292,13 +293,4 @@ func requiresSection(operation string) bool {
 		operation == "insert_after" ||
 		operation == "replace" ||
 		operation == "delete"
-}
-
-func contains(haystack []string, needle string) bool {
-	for _, v := range haystack {
-		if v == needle {
-			return true
-		}
-	}
-	return false
 }
